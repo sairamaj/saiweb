@@ -12,25 +12,15 @@ export class NavMenu extends Component {
       <Navbar inverse fixedTop fluid collapseOnSelect>
         <Navbar.Header>
           <Navbar.Brand>
-            <Link to={'/'}>test</Link>
+            <Link to={'/techtips'}>Sai tools</Link>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav>
-            <LinkContainer to={'/'} exact>
+            <LinkContainer to={'/techtips'} exact>
               <NavItem>
-                <Glyphicon glyph='home' /> Home
-              </NavItem>
-            </LinkContainer>
-            <LinkContainer to={'/counter'}>
-              <NavItem>
-                <Glyphicon glyph='education' /> Counter
-              </NavItem>
-            </LinkContainer>
-            <LinkContainer to={'/techtips'}>
-              <NavItem>
-                <Glyphicon glyph='th-list' /> Tech Tips
+                <Glyphicon glyph='Tech Tips' /> Tech Tips
               </NavItem>
             </LinkContainer>
           </Nav>

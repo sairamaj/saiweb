@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 export class TechTips extends Component {
   displayName = TechTips.name
 
   constructor(props) {
     super(props);
-    this.state = { forecasts: [], loading: true };
+    this.state = { categories: [], loading: true };
 
     fetch('https://saitools.azurewebsites.net/api/techtips')
       .then(response => response.json())
       .then(data => {
-        this.setState({ forecasts: data, loading: false });
+        this.setState({ categories: data, loading: false });
       });
   }
 
-  static renderTechTips(techtips) {
+  static renderCategories(categories) {
     return (
       <table className='table'>
         <thead>
@@ -23,9 +24,11 @@ export class TechTips extends Component {
           </tr>
         </thead>
         <tbody>
-          {techtips.map(techtip =>
-            <tr key={techtip.name}>
-              <td>{techtip.name}</td>
+          {categories.map(category =>
+            <tr key={category.name}>
+              <td>
+              <Link to={'/techtipdetails/' + category.name}>{category.name}</Link>
+              </td>
             </tr>
           )}
         </tbody>
@@ -36,7 +39,7 @@ export class TechTips extends Component {
   render() {
     let contents = this.state.loading
       ? <p><em>Loading...</em></p>
-      : TechTips.renderTechTips(this.state.forecasts);
+      : TechTips.renderCategories(this.state.categories);
 
     return (
       <div>
