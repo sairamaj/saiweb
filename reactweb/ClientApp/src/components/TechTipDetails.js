@@ -15,6 +15,34 @@ export class TechTipDetails extends Component {
       });
   }
 
+  static renderInfoTips(tips) {
+    return (
+      <table className='table'>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Url</th>
+          </tr>
+        </thead>
+        <tbody>
+          {tips.map(tip =>
+            <tr key={tip.name}>
+              <td>
+               {tip.name}
+              </td>
+              <td>
+               {tip.description}
+              </td>
+              <td>
+               <a href={tip.url}>{tip.url}</a>
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    );
+  }
   static renderTips(tips) {
     return (
       <table className='table'>
@@ -50,10 +78,17 @@ export class TechTipDetails extends Component {
       </table>
     );
   }
+
+  isCommand(tips){
+    return(
+      tips.some(tip=> tip.command !== undefined)
+    )
+  }
+
   render() {
     let contents = this.state.loading
     ? <p><em>Loading...</em></p>
-    : TechTipDetails.renderTips(this.state.techTips);
+    : (this.isCommand(this.state.techTips) ? TechTipDetails.renderTips(this.state.techTips) : TechTipDetails.renderInfoTips(this.state.techTips) );
 
   return (
     <div>

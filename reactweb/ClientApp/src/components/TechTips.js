@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import SearchBar from 'material-ui-search-bar'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
 
 export class TechTips extends Component {
   displayName = TechTips.name
@@ -20,7 +23,7 @@ export class TechTips extends Component {
       <table className='table'>
         <thead>
           <tr>
-            <th>Name</th>
+            <th>Category</th>
           </tr>
         </thead>
         <tbody>
@@ -33,6 +36,7 @@ export class TechTips extends Component {
           )}
         </tbody>
       </table>
+
     );
   }
 
@@ -44,8 +48,27 @@ export class TechTips extends Component {
     return (
       <div>
         <h1>Tech Tips</h1>
-        {contents}
+      <MuiThemeProvider>
+        <SearchBar
+      value={this.state.value}
+      onChange={(newValue) => this.setState({ value: newValue })} />
+      <div>
+      {contents}
       </div>
-    );
+    </MuiThemeProvider>
+    </div>
+    )
+  //     return (
+  //     <div>
+  //       <h1>Tech Tips</h1>
+  //       <SearchBar
+  //   value={this.state.value}
+  //   onChange={(newValue) => this.setState({ value: newValue })}
+  // />
+  //   {/* <div>
+  //       {contents}
+  //       </div> */}
+  //     </div>
+  //   );
   }
 }
