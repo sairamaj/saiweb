@@ -14,7 +14,8 @@
     "react-copy-to-clipboard": "^5.0.1",
     "react-table": "6.8.6",
     "material-ui-search-bar": "0.4.2",
-    "material-ui": "0.20.2"
+    "material-ui": "0.20.2",
+    "react-image": "1.4.1"
   },
   "scripts": {
     "start": "rimraf ./build && react-scripts start",

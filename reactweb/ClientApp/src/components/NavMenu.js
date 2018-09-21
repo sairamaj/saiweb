@@ -12,7 +12,7 @@ export class NavMenu extends Component {
       <Navbar inverse fixedTop fluid collapseOnSelect>
         <Navbar.Header>
           <Navbar.Brand>
-            <Link to={'/techtips'}>SaiRama tools</Link>
+            <Link to={'/techtips'}>SaiRama</Link>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
@@ -20,7 +20,7 @@ export class NavMenu extends Component {
           <Nav>
             <LinkContainer to={'/techtips'} exact>
               <NavItem>
-                <Glyphicon glyph='Tech Tips' /> Tech Tips
+                <Glyphicon glyph='education' /> Tech Tips
               </NavItem>
             </LinkContainer>
           </Nav>
