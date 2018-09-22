@@ -1,17 +1,22 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import SearchBar from 'material-ui-search-bar'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Img from 'react-image'
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import SearchBar from "material-ui-search-bar";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import Img from "react-image";
 
 export class TechTips extends Component {
-  displayName = TechTips.name
+  displayName = TechTips.name;
 
   constructor(props) {
     super(props);
-    this.state = { categories: [], searchData: [], loading: true, searching: false };
+    this.state = {
+      categories: [],
+      searchData: [],
+      loading: true,
+      searching: false
+    };
 
-    fetch('https://saitools.azurewebsites.net/api/techtips')
+    fetch("https://saitools.azurewebsites.net/api/techtips")
       .then(response => response.json())
       .then(data => {
         this.setState({ categories: data, loading: false });
@@ -19,28 +24,41 @@ export class TechTips extends Component {
   }
 
   onSearch(value) {
-    fetch('https://saitools.azurewebsites.net/api/techtips?q=' + value)
+    if (value === undefined || value.length === 0) {
+      this.setState({
+        categories: this.state.categories,
+        searchData: [],
+        searching: false
+      });
+      return;
+    }
+
+    console.log("fetching for:" + value);
+    fetch("https://saitools.azurewebsites.net/api/techtips?q=" + value)
       .then(response => response.json())
       .then(searchData => {
-        console.log(searchData.length)
+        console.log(searchData.length);
         searchData.forEach(d => {
-          console.log(d)
-        })
-        this.setState({ categories: this.state.categories, searchData: searchData, searching: false });
+          console.log(d);
+        });
+        this.setState({
+          categories: this.state.categories,
+          searchData: searchData,
+          searching: false
+        });
       });
   }
 
   static renderSearchResults(tips) {
     if (tips.length === 0) {
-      return (
-        <div></div>
-      )
+      return <div />;
     }
 
     return (
-      <table className='table'>
+      <table className="table">
         <thead>
           <tr>
+            <th>Category</th>
             <th>Name</th>
             <th>Command</th>
             <th>Description</th>
@@ -48,25 +66,28 @@ export class TechTips extends Component {
           </tr>
         </thead>
         <tbody>
-          {tips.map(tip =>
+          {tips.map(tip => (
             <tr>
               <td>
-                {tip.name}
+                <img src={"images/" + tip.category + ".png"} /> &nbsp;&nbsp;
+                <Link to={"/techtipdetails/" + tip.category}>
+                  {tip.category}
+                </Link>
               </td>
+
+              <td>{tip.name}</td>
               <td>
                 {tip.command}
                 {/* <CopyToClipboard onCopy={this.onCopy} text={tip.command}>
             <button>Copy</button>
           </CopyToClipboard> */}
               </td>
-              <td>
-                {tip.description}
-              </td>
+              <td>{tip.description}</td>
               <td>
                 <a href={tip.url}>{tip.url}</a>
               </td>
             </tr>
-          )}
+          ))}
         </tbody>
       </table>
     );
@@ -74,31 +95,36 @@ export class TechTips extends Component {
 
   static renderCategories(categories) {
     return (
-      <table className='table'>
+      <table className="table">
         <thead>
           <tr>
             <th>Category</th>
           </tr>
         </thead>
         <tbody>
-          {categories.map(category =>
+          {categories.map(category => (
             <tr key={category.name}>
               <td>
-              <img src={'images/' + category.name + '.png'}/> &nbsp;&nbsp;
-                <Link to={'/techtipdetails/' + category.name}>{category.name}</Link>
+                <img src={"images/" + category.name + ".png"} /> &nbsp;&nbsp;
+                <Link to={"/techtipdetails/" + category.name}>
+                  {category.name}
+                </Link>
               </td>
             </tr>
-          )}
+          ))}
         </tbody>
       </table>
-
     );
   }
 
   render() {
-    let contents = this.state.loading
-      ? <p><em>Loading...</em></p>
-      : TechTips.renderCategories(this.state.categories);
+    let contents = this.state.loading ? (
+      <p>
+        <em>Loading...</em>
+      </p>
+    ) : (
+      TechTips.renderCategories(this.state.categories)
+    );
     let searchResults = TechTips.renderSearchResults(this.state.searchData);
     return (
       <div>
@@ -108,19 +134,15 @@ export class TechTips extends Component {
         <MuiThemeProvider>
           <SearchBar
             value={this.state.value}
-            onChange={(newValue) => this.setState({ value: newValue })}
+            onChange={newValue => this.setState({ value: newValue })}
             onRequestSearch={() => this.onSearch(this.state.value)}
           />
-          <div>
-            {searchResults}
-          </div>
+          <div>{searchResults}</div>
           <br />
           <br />
-          <div>
-            {contents}
-          </div>
+          <div>{contents}</div>
         </MuiThemeProvider>
       </div>
-    )
+    );
   }
 }
