@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import SearchBar from "material-ui-search-bar";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import Img from "react-image";
+import { store } from ".././store";
+import { search } from ".././actions";
+import { fetchData } from ".././actions";
+
 
 export class TechTips extends Component {
   displayName = TechTips.name;
@@ -33,6 +37,8 @@ export class TechTips extends Component {
       return;
     }
 
+    fetchData(value)(store.dispatch);
+    return
     console.log("fetching for:" + value);
     fetch("https://saitools.azurewebsites.net/api/techtips?q=" + value)
       .then(response => response.json())
@@ -118,6 +124,7 @@ export class TechTips extends Component {
   }
 
   render() {
+    console.log('in techtips.render....')
     let contents = this.state.loading ? (
       <p>
         <em>Loading...</em>
@@ -125,6 +132,7 @@ export class TechTips extends Component {
     ) : (
       TechTips.renderCategories(this.state.categories)
     );
+    console.log('in techtips.render searchData:' + JSON.stringify(this.state))
     let searchResults = TechTips.renderSearchResults(this.state.searchData);
     return (
       <div>
