@@ -20,6 +20,13 @@ export default props => (
           </NavItem>
         </LinkContainer>
       </Nav>
+      <Nav>
+        <LinkContainer to={'/azure'} exact>
+          <NavItem>
+            <Glyphicon glyph='home' /> Azure
+          </NavItem>
+        </LinkContainer>
+      </Nav>
     </Navbar.Collapse>
   </Navbar>
 );
