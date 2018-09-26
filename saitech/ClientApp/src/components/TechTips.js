@@ -3,6 +3,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { actionCreators } from '../store/TechTipsData';
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import SearchTechTips from './SearchTechTips';
 
 class TechTips extends Component {
   componentWillMount() {
@@ -12,8 +14,16 @@ class TechTips extends Component {
   render() {
     return (
       <div>
-        <h1>Tips data</h1>
-        {renderCategories(this.props)}
+        <h2>Tech Tips</h2>
+        <br />
+        <br />
+        <MuiThemeProvider>
+          <SearchTechTips />
+          <div>{renderCategories(this.props)}</div>
+          <br />
+          <br />
+          <div>{renderCategories(this.props)}</div>
+        </MuiThemeProvider>
       </div>
     );
   }
@@ -34,8 +44,8 @@ function renderCategories(props) {
             <td>
               <img src={"images/" + category.name + ".png"} /> &nbsp;&nbsp;
               <Link to={"/techtipdetails/" + category.name}>
-                  {category.name}
-                </Link>
+                {category.name}
+              </Link>
             </td>
           </tr>
         )}
@@ -43,6 +53,7 @@ function renderCategories(props) {
     </table>
   );
 }
+
 
 export default connect(
   state => state.categories,

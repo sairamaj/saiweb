@@ -10,7 +10,8 @@ export default function configureStore(history, initialState) {
     counter: Counter.reducer,
     weatherForecasts: WeatherForecasts.reducer,
     categories: TechTipsData.reducer,
-    tips: TechTipsData.reducer
+    tips: TechTipsData.reducer,
+    searchTips : TechTipsData.reducer
   };
 
   const middleware = [
