@@ -6,7 +6,7 @@ import { actionCreators } from '../store/TechTipsData';
 
 class TechTips extends Component {
   componentWillMount() {
-    this.props.requestTechTips();
+    this.props.requestTechCategories();
   }
 
   render() {
