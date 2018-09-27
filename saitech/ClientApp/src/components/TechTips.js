@@ -12,6 +12,7 @@ class TechTips extends Component {
   }
 
   render() {
+
     return (
       <div>
         <h2>Tech Tips</h2>
@@ -19,7 +20,6 @@ class TechTips extends Component {
         <br />
         <MuiThemeProvider>
           <SearchTechTips />
-          <div>{renderCategories(this.props)}</div>
           <br />
           <br />
           <div>{renderCategories(this.props)}</div>
@@ -30,12 +30,16 @@ class TechTips extends Component {
 }
 
 function renderCategories(props) {
-
+  if( props.isLoading){
+    return(
+      <div><h3>Loading...</h3></div>
+    )
+  }
   return (
     <table className='table'>
       <thead>
         <tr>
-          <th>Name</th>
+          <th>Category</th>
         </tr>
       </thead>
       <tbody>

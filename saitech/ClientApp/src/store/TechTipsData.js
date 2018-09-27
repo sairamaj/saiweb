@@ -4,14 +4,15 @@ const requestTechTipsType = 'REQUEST_TECH_TIPS';
 const receiveTechTipsType = 'RECEIVE_TECH_TIPS';
 const requestTechSearchTipsType = 'REQUEST_TECH_SEARCH_TIPS';
 const receiveTechSearchTipsType = 'RECEIVE_TECH_SEARCH_TIPS';
-const initialState = { categories: [], tips: [], searchTips: [], isLoading: false };
+const initialState = { categories: [], tips: [], searchTips: [], isLoading: false, searchValue : '' };
 const techTipsUrl = 'https://saitools.azurewebsites.net/api/techtips';
 
+const timeout = ms => new Promise(res => setTimeout(res, ms))
 export const actionCreators = {
   requestTechCategories: () => async (dispatch, getState) => {
 
     dispatch({ type: requestTechCategoriesType });
-
+    
     const response = await fetch(techTipsUrl);
     const categories = await response.json();
 
@@ -31,7 +32,7 @@ export const actionCreators = {
   requestSearch: (searchValue) => async (dispatch, getState) => {
 
     if( searchValue === ''){
-      dispatch({ type: receiveTechSearchTipsType, searchTips:[] });
+      dispatch({ type: receiveTechSearchTipsType, tips:[], searchValue });
       return
     }
 
@@ -40,7 +41,7 @@ export const actionCreators = {
     const response = await fetch(techTipsUrl + `/?q=${searchValue}`);
     const tips = await response.json();
 
-    dispatch({ type: receiveTechSearchTipsType, tips });
+    dispatch({ type: receiveTechSearchTipsType, tips, searchValue });
   }
 
 };
@@ -82,6 +83,7 @@ export const reducer = (state, action) => {
       return {
         ...state,
         searchTips: action.tips,
+        searchValue: action.searchValue,
         isSearching: false
       };
   }
