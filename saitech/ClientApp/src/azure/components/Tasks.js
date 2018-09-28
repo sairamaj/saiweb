@@ -9,7 +9,7 @@ const input =
   "# This is a \n\n" +
   "And this is a paragraph\n\n" +
   "* az\n\n" +
-  "   * az vm create";
+  "   * az vm create extra";
 
 class Tasks extends Component {
   componentWillMount() {
