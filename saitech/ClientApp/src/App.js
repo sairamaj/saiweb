@@ -10,6 +10,6 @@ export default () => (
     <Route exact path='/' component={TechTips} />
     <Route path='/techtips' component={TechTips} />
     <Route path='/techtipdetails/:name' component={TechTipDetails} />
-    <Route path='/azure' component={Tasks} />
+    
   </Layout>
 );
