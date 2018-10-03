@@ -26,10 +26,12 @@ class TechTips extends Component {
         </MuiThemeProvider>
       </div>
     );
-  }
+  } 
 }
 
 function renderCategories(props) {
+  //imageUrl = 'https://saitechstorage.blob.core.windows.net/saitech/images/'
+
   if( props.isLoading){
     return(
       <div><h3>Loading...</h3></div>
@@ -46,7 +48,7 @@ function renderCategories(props) {
         {props.categories.map(category =>
           <tr key={category.name}>
             <td>
-              <img src={"images/" + category.name + ".png"} /> &nbsp;&nbsp;
+              <img src={'https://saitechstorage.blob.core.windows.net/saitech/images/' + category.name + ".png"} /> &nbsp;&nbsp;
               <Link to={"/techtipdetails/" + category.name}>
                 {category.name}
               </Link>
