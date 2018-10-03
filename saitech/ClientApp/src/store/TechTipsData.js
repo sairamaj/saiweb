@@ -15,8 +15,8 @@ const initialState = {
   searchValue: "",
   techdata: ""
 };
-const techTipsUrl = "https://saitools.azurewebsites.net/api/techtips";
-const techinfoUrl = "https://saitools.azurewebsites.net/api/techinfo";
+const techTipsUrl = "https://saitech.azurewebsites.net/api/techtips";
+const techinfoUrl = "https://saitech.azurewebsites.net/api/techinfo";
 
 const timeout = ms => new Promise(res => setTimeout(res, ms));
 export const actionCreators = {
