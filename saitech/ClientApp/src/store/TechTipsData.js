@@ -16,12 +16,32 @@ const initialState = {
   isLoading: false,
   searchValue: "",
   tasks: [],
-  taskdetail: {}
+  taskdetail: {},
+  currentError: undefined
 };
 const techTipsUrl = "https://saitech.azurewebsites.net/api/techtips";
 const techTasksUrl = "https://saitech.azurewebsites.net/api/techtasks";
 
-const timeout = ms => new Promise(res => setTimeout(res, ms));
+//const timeout = ms => new Promise(res => setTimeout(res, ms));
+
+// async function
+let getRequest = async function(url){
+  console.log(`fetching: ${url}`)
+  let data = await (await (fetch(url)
+    .then(res => {
+      return res.json()
+    })
+    .catch(err => {
+      throw err
+    })
+  ))
+  console.log(`returning data:` + JSON.stringify(data))
+  if( data.code !== undefined){
+    throw new Error(JSON.stringify(data));
+  }
+  return data
+}
+
 export const actionCreators = {
   requestTechCategories: () => async (dispatch, getState) => {
     dispatch({ type: requestTechCategoriesType });
@@ -56,24 +76,27 @@ export const actionCreators = {
   },
 
   requestTechInfo: () => async (dispatch, getState) => {
+
     dispatch({ type: requestTechInfoType });
-    console.log(`fetching: ${techTasksUrl}`);
-    const response = await fetch(techTasksUrl);
-    const responseData = await response.json();
-    console.log('tasks:' + JSON.stringify(responseData));
-    dispatch({ type: receiveTechInfoType, tasks: responseData });
+
+    try{
+      var response = await getRequest(techTasksUrl);
+      dispatch({ type: receiveTechInfoType, tasks: response });
+    }catch(err){
+      dispatch({ type: receiveTechInfoType, err });
+    }
+    
   },
 
   requestTaskDetail: (task) => async (dispatch, getState) => {
     dispatch({ type: requestTaskDetailType })
 
-    const taskDetailUrl = `${task.href}`
-    console.log(`fetching: ${taskDetailUrl}`);
-    const response = await fetch(taskDetailUrl);
-    const responseData = await response.json();
-    console.log('tasks:' + JSON.stringify(responseData));
-
-    dispatch({ type: receiveTaskDetailType, task: { ...task, detail:responseData.details } })
+    try{
+      var response = await getRequest(task.href);
+      dispatch({ type: receiveTaskDetailType, task: { ...task, detail: response.details } })
+    }catch(err){
+      dispatch({ type: receiveTechInfoType, err });
+    }
   }
 };
 
@@ -119,25 +142,33 @@ export const reducer = (state, action) => {
     case requestTechInfoType:
       return {
         ...state,
+        currentError: undefined,
         isLoading: true
       }
     case receiveTechInfoType:
-      return {
-        ...state,
-        tasks: action.tasks,
-        isLoading: false
-      };
+      if (action.err !== undefined) {
+        return {
+          ...state,
+          currentError: action.err
+        }
+      } else {
+        return {
+          ...state,
+          tasks: action.tasks,
+          isLoading: false
+        };
+      }
     case receiveTaskDetailType:
-      var modifiedTasks = state.tasks.map( task=>{
-        if( task.name === action.task.name){
-            task.detail = action.task.detail
+      var modifiedTasks = state.tasks.map(task => {
+        if (task.name === action.task.name) {
+          task.detail = action.task.detail
         }
         return task;
       })
-      
+
       return {
         ...state,
-        tasks : modifiedTasks
+        tasks: modifiedTasks
       }
   }
   return state;
