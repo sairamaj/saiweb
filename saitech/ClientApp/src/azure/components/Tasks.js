@@ -50,7 +50,7 @@ class Tasks extends Component {
             </tr>
             <tr>
               <td>
-              <div>{task.detail}</div>
+              <ReactMarkdown source={task.detail} />
               </td>
             </tr>
           </tbody>
