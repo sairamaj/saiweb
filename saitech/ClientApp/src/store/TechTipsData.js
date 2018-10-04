@@ -6,6 +6,8 @@ const requestTechSearchTipsType = "REQUEST_TECH_SEARCH_TIPS";
 const receiveTechSearchTipsType = "RECEIVE_TECH_SEARCH_TIPS";
 const requestTechInfoType = "REQUEST_TECH_INFO";
 const receiveTechInfoType = "RECEIVE_TECH_INFO";
+const requestTaskDetailType = "REQUEST_TASK_DETAIL_INFO";
+const receiveTaskDetailType = "RECEIVE_TASK_DETAIL_INFO";
 
 const initialState = {
   categories: [],
@@ -13,7 +15,8 @@ const initialState = {
   searchTips: [],
   isLoading: false,
   searchValue: "",
-  tasks: []
+  tasks: [],
+  taskdetail: {}
 };
 const techTipsUrl = "https://saitech.azurewebsites.net/api/techtips";
 const techTasksUrl = "https://saitech.azurewebsites.net/api/techtasks";
@@ -59,6 +62,18 @@ export const actionCreators = {
     const responseData = await response.json();
     console.log('tasks:' + JSON.stringify(responseData));
     dispatch({ type: receiveTechInfoType, tasks: responseData });
+  },
+
+  requestTaskDetail: (task) => async (dispatch, getState) => {
+    dispatch({ type: requestTaskDetailType })
+
+    const taskDetailUrl = `${task.href}`
+    console.log(`fetching: ${taskDetailUrl}`);
+    const response = await fetch(taskDetailUrl);
+    const responseData = await response.json();
+    console.log('tasks:' + JSON.stringify(responseData));
+
+    dispatch({ type: receiveTaskDetailType, task: { ...task, detail:responseData.details } })
   }
 };
 
@@ -102,16 +117,28 @@ export const reducer = (state, action) => {
         isSearching: false
       };
     case requestTechInfoType:
-    return {
-      ...state,
-      isLoading : true
-    }
+      return {
+        ...state,
+        isLoading: true
+      }
     case receiveTechInfoType:
       return {
         ...state,
         tasks: action.tasks,
-        isLoading : false
+        isLoading: false
       };
+    case receiveTaskDetailType:
+      var modifiedTasks = state.tasks.map( task=>{
+        if( task.name === action.task.name){
+            task.detail = action.task.detail
+        }
+        return task;
+      })
+      
+      return {
+        ...state,
+        tasks : modifiedTasks
+      }
   }
   return state;
 };

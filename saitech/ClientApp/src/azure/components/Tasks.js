@@ -15,38 +15,53 @@ class Tasks extends Component {
   componentWillMount() {
     this.props.requestTechInfo();
   }
+
+  onTaskClick(props,task) {
+    console.log('onTaskClick.')
+    props.requestTaskDetail(task);
+  }
+
   render() {
-    return <div>{renderTasks(this.props)}</div>;
+    return <div>{this.renderTasks(this.props, this.onTaskClick)}</div>;
+  }
+
+  renderTasks(props, func) {
+    if (props.isLoading) {
+      return (
+        <div>
+          <h3>Loading...</h3>
+        </div>
+      );
+    }
+
+    return (
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Tasks</th>
+          </tr>
+        </thead>
+        {props.tasks.map(task => (
+          <tbody>
+            <tr key={task.name}>
+              <td>
+                <a onClick={() => func(props,task)}>{task.name}</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              <div>{task.detail}</div>
+              </td>
+            </tr>
+          </tbody>
+        ))}
+      </table>
+    );
   }
 }
 
-function renderTasks(props) {
-  if (props.isLoading) {
-    return (
-      <div>
-        <h3>Loading...</h3>
-      </div>
-    );
-  }
-  return (
-    <table className="table">
-      <thead>
-        <tr>
-          <th>Tasks</th>
-        </tr>
-      </thead>
-      <tbody>
-        {props.tasks.map(task => (
-          <tr key={task.name}>
-            <td>
-              <Link to={"/techtipdetails/" + task.name}>{task.name}</Link>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-}
+
+
 export default connect(
   state => state.categories,
   dispatch => bindActionCreators(actionCreators, dispatch)
