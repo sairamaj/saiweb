@@ -49,7 +49,7 @@ function renderSearchResults(props) {
         {tips.map(tip => (
           <tr>
             <td>
-              <img src={"images/" + tip.category + ".png"} /> &nbsp;&nbsp;
+              <img src={"https://saitechstorage.blob.core.windows.net/saitech/images/" + tip.category + ".png"} /> &nbsp;&nbsp;
               <Link to={"/techtipdetails/" + tip.category}>{tip.category}</Link>
             </td>
 

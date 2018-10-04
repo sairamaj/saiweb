@@ -13,10 +13,10 @@ const initialState = {
   searchTips: [],
   isLoading: false,
   searchValue: "",
-  techdata: ""
+  tasks: []
 };
 const techTipsUrl = "https://saitech.azurewebsites.net/api/techtips";
-const techinfoUrl = "https://saitech.azurewebsites.net/api/techinfo";
+const techTasksUrl = "https://saitech.azurewebsites.net/api/techtasks";
 
 const timeout = ms => new Promise(res => setTimeout(res, ms));
 export const actionCreators = {
@@ -54,11 +54,11 @@ export const actionCreators = {
 
   requestTechInfo: () => async (dispatch, getState) => {
     dispatch({ type: requestTechInfoType });
-    console.log(`fetching: ${techinfoUrl}`);
-    const response = await fetch(techinfoUrl);
+    console.log(`fetching: ${techTasksUrl}`);
+    const response = await fetch(techTasksUrl);
     const responseData = await response.json();
-    console.log('receiveTechInfoType:' + JSON.stringify(responseData));
-    dispatch({ type: receiveTechInfoType, techdata: responseData.data });
+    console.log('tasks:' + JSON.stringify(responseData));
+    dispatch({ type: receiveTechInfoType, tasks: responseData });
   }
 };
 
@@ -101,10 +101,16 @@ export const reducer = (state, action) => {
         searchValue: action.searchValue,
         isSearching: false
       };
+    case requestTechInfoType:
+    return {
+      ...state,
+      isLoading : true
+    }
     case receiveTechInfoType:
       return {
         ...state,
-        techdata: action.techdata
+        tasks: action.tasks,
+        isLoading : false
       };
   }
   return state;
