@@ -4,3 +4,55 @@
         padding-top: 50px;
     }
 }
+
+:root {
+    --border-radius: 6px;
+    --color-primary: rgb(39, 164, 254);
+    --color-background: var(--color-primary);
+    --color-background-active: rgb(39, 148, 235);
+    --color-border: rgb(22, 110, 170);
+  }
+  
+  *,
+  *:after,
+  *:before {
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  }
+  
+ 
+  .react-sanfona {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-bottom: 70px;
+  }
+  
+  .react-sanfona-item-title {
+    background-color: #fafafa;
+    border-top: 1px solid rgb(204, 204, 204);
+    color: rgb(67, 82, 71);
+    padding: 20px;
+    transition: background-color .3s;
+  }
+  
+  .react-sanfona-item:first-child .react-sanfona-item-title {
+    border-top: none;
+  }
+  
+  .react-sanfona-item-expanded .react-sanfona-item-title {
+    background-color: var(--color-primary);
+    color: #fff;
+  }
+  
+  .react-sanfona-item-body-wrapper {
+    color: #666;
+    padding: 20px;
+    position: relative;
+  }
+  
+  .react-sanfona-item-body-wrapper:hover .tooltip {
+    opacity: 1;
+  }

@@ -18,11 +18,15 @@ class Tasks extends Component {
   }
 
   render() {
-    if( this.props.currentError !== undefined){
+    if (this.props.currentError !== undefined) {
       return <div><h1>{this.props.currentError.toString()}</h1></div>
     }
-    
-    return <div>{this.renderTasks(this.props, this.onTaskClick)}</div>;
+
+    return <div>
+      <br/><br/>
+      <h3>Tasks</h3>
+      {this.renderTasks(this.props, this.onTaskClick)}
+    </div>;
   }
 
   renderTasksold(props, func) {
@@ -71,7 +75,12 @@ class Tasks extends Component {
       <Accordion className="react-sanfona">
         {props.tasks.map((task) => {
           return (
-            <AccordionItem title={task.name} slug={task.name} key={task.name} onExpand={() => func(props, task)} >
+            <AccordionItem
+              title={task.name}
+              slug={task.name}
+              key={task.name}
+              onExpand={() => func(props, task)} 
+              >
               <div>
                 <ReactMarkdown source={task.detail} />
               </div>
