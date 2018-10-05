@@ -24,6 +24,20 @@ const techTasksUrl = "https://saitech.azurewebsites.net/api/techtasks";
 
 //const timeout = ms => new Promise(res => setTimeout(res, ms));
 
+String.prototype.trimRight = function(charlist) {
+  if (charlist === undefined)
+    charlist = "\s";
+
+  return this.replace(new RegExp("[" + charlist + "]+$"), "");
+};
+let trimTaskExtensions = function(tasks){
+  return tasks.map( task=> {
+    return {
+      ...task,
+      name : task.name.trimRight(".MD")
+    }
+  })
+}
 // async function
 let getRequest = async function(url){
   console.log(`fetching: ${url}`)
@@ -154,7 +168,7 @@ export const reducer = (state, action) => {
       } else {
         return {
           ...state,
-          tasks: action.tasks,
+          tasks: trimTaskExtensions(action.tasks),
           isLoading: false
         };
       }
