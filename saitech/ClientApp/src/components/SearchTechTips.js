@@ -29,6 +29,10 @@ function renderSearchResults(props) {
     return <div><h3>Searching...</h3></div>;
   }
 
+  if(props.currentError !== undefined){
+    return <div><h3>{props.currentError}</h3></div>;
+  }
+
   let tips = props.searchTips;
   if( tips.length === 0){
     return props.searchValue.length > 0 ? <div><h3>No results found</h3></div> : <div />;
