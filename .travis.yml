@@ -6,7 +6,6 @@ script:
   - dotnet build saitech
 deploy:
   provider: azure_web_apps
-  verbose: true
   skip_cleanup: true
 git:
    depth: 9999999  
