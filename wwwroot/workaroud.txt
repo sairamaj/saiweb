@@ -1,0 +1,1 @@
+this file exists so that Azure CD/CI does not complain about 'No web project was found in the repository"
