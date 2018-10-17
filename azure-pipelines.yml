@@ -15,7 +15,7 @@ steps:
 - script: |
     dotnet restore saitech
     dotnet build saitech
-    dotnet publish --output $(Build.ArtifactStagingDirectory
+    dotnet publish --output $(Build.ArtifactStagingDirectory)
 
 - task: DotNetCoreCLI@2
   inputs:
