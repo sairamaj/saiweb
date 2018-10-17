@@ -13,13 +13,13 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-    dotnet restore saitech
-    dotnet build saitech
-    dotnet publish saitech --output $(Build.ArtifactStagingDirectory)
+    dotnet restore
+    dotnet build
+    dotnet publish --output $(Build.ArtifactStagingDirectory)
 
 - task: DotNetCoreCLI@2
   inputs:
     command: publish
     publishWebProjects: True
-    arguments: 'saitech --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: True
