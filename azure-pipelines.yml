@@ -12,7 +12,6 @@ steps:
     versionSpec: '8.x'
   displayName: 'Install Node.js'
 
-- script: 
-  dotnet restore saitech
-  dotnet build saitech
-  displayName: 'restore and build'
+- script: |
+    dotnet restore saitech
+    dotnet build saitech
