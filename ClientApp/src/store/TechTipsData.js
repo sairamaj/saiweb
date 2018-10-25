@@ -10,7 +10,6 @@ const requestTaskDetailType = "REQUEST_TASK_DETAIL_INFO";
 const receiveTaskDetailType = "RECEIVE_TASK_DETAIL_INFO";
 const receiveError = "RECEIVE_ERROR";
 
-
 const initialState = {
   categories: [],
   tips: [],
@@ -26,37 +25,35 @@ const techTasksUrl = "https://saitech.azurewebsites.net/api/techtasks";
 
 //const timeout = ms => new Promise(res => setTimeout(res, ms));
 
-String.prototype.trimRight = function (charlist) {
-  if (charlist === undefined)
-    charlist = "\s";
+String.prototype.trimRight = function(charlist) {
+  if (charlist === undefined) charlist = "s";
 
   return this.replace(new RegExp("[" + charlist + "]+$"), "");
 };
-let trimTaskExtensions = function (tasks) {
+let trimTaskExtensions = function(tasks) {
   return tasks.map(task => {
     return {
       ...task,
       name: task.name.trimRight(".MD")
-    }
-  })
-}
+    };
+  });
+};
 // async function
-let getRequest = async function (url) {
-  console.log(`fetching: ${url}`)
-  let data = await (await (fetch(url)
+let getRequest = async function(url) {
+  console.log(`fetching: ${url}`);
+  let data = await await fetch(url)
     .then(res => {
-      return res.json()
+      return res.json();
     })
     .catch(err => {
-      throw err
-    })
-  ))
-  console.log(`returning data:` + JSON.stringify(data))
+      throw err;
+    });
+  console.log(`returning data:` + JSON.stringify(data));
   if (data.code !== undefined) {
     throw new Error(JSON.stringify(data));
   }
-  return data
-}
+  return data;
+};
 
 export const actionCreators = {
   requestTechCategories: () => async (dispatch, getState) => {
@@ -88,14 +85,13 @@ export const actionCreators = {
     const response = await fetch(techTipsUrl + `/?q=${searchValue}`);
     const tips = await response.json();
     if (tips.error !== undefined) {
-      dispatch({ type: receiveError, error:tips.error, searchValue });
+      dispatch({ type: receiveError, error: tips.error, searchValue });
     } else {
       dispatch({ type: receiveTechSearchTipsType, tips, searchValue });
     }
   },
 
   requestTechInfo: () => async (dispatch, getState) => {
-
     dispatch({ type: requestTechInfoType });
 
     try {
@@ -104,15 +100,17 @@ export const actionCreators = {
     } catch (err) {
       dispatch({ type: receiveTechInfoType, err });
     }
-
   },
 
-  requestTaskDetail: (task) => async (dispatch, getState) => {
-    dispatch({ type: requestTaskDetailType })
+  requestTaskDetail: task => async (dispatch, getState) => {
+    dispatch({ type: requestTaskDetailType });
 
     try {
       var response = await getRequest(task.href);
-      dispatch({ type: receiveTaskDetailType, task: { ...task, detail: response.details } })
+      dispatch({
+        type: receiveTaskDetailType,
+        task: { ...task, detail: response.details }
+      });
     } catch (err) {
       dispatch({ type: receiveTechInfoType, err });
     }
@@ -163,13 +161,13 @@ export const reducer = (state, action) => {
         ...state,
         currentError: undefined,
         isLoading: true
-      }
+      };
     case receiveTechInfoType:
       if (action.err !== undefined) {
         return {
           ...state,
           currentError: action.err
-        }
+        };
       } else {
         return {
           ...state,
@@ -179,23 +177,24 @@ export const reducer = (state, action) => {
       }
     case receiveTaskDetailType:
       var modifiedTasks = state.tasks.map(task => {
+        console.log(`task.name : ${task.name} action.task:${action.task.name}`);
         if (task.name === action.task.name) {
-          task.detail = action.task.detail
+          console.log("task updated.");
+          task.detail = action.task.detail.data;
         }
         return task;
-      })
+      });
 
       return {
         ...state,
         tasks: modifiedTasks
-      }
+      };
     case receiveError:
       return {
         ...state,
         isSearching: false,
         currentError: action.error
-      }
-
+      };
   }
   return state;
 };
