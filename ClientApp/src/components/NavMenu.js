@@ -23,7 +23,14 @@ export default props => (
       <Nav>
         <LinkContainer to={'/azure'} exact>
           <NavItem>
-            <Glyphicon glyph='home' /> Azure(5)
+            <Glyphicon glyph='home' /> Azure
+          </NavItem>
+        </LinkContainer>
+      </Nav>
+      <Nav>
+        <LinkContainer to={'/codesnippets'} exact>
+          <NavItem>
+            <Glyphicon glyph='home' /> Code Snippets
           </NavItem>
         </LinkContainer>
       </Nav>

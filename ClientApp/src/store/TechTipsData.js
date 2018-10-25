@@ -8,7 +8,12 @@ const requestTechInfoType = "REQUEST_TECH_INFO";
 const receiveTechInfoType = "RECEIVE_TECH_INFO";
 const requestTaskDetailType = "REQUEST_TASK_DETAIL_INFO";
 const receiveTaskDetailType = "RECEIVE_TASK_DETAIL_INFO";
+const requestSnippetDetailType = "REQUEST_SNIPPET_DETAIL_INFO";
+const receiveSnippetDetailType = "RECEIVE_SNIPPET_DETAIL_INFO";
+
 const receiveError = "RECEIVE_ERROR";
+const requestCodeSnippetsType = "REQUEST_CODESNIPPETS_INFO";
+const receiveCodeSnippetsType = "RECEIVE_CODESNIPPETS_INFO";
 
 const initialState = {
   categories: [],
@@ -18,10 +23,12 @@ const initialState = {
   searchValue: "",
   tasks: [],
   taskdetail: {},
+  codesnippets: [],
   currentError: undefined
 };
 const techTipsUrl = "https://saitech.azurewebsites.net/api/techtips";
 const techTasksUrl = "https://saitech.azurewebsites.net/api/techtasks";
+const codeSnippetsUrl = "https://saitech.azurewebsites.net/api/codesnippets";
 
 //const timeout = ms => new Promise(res => setTimeout(res, ms));
 
@@ -30,7 +37,7 @@ String.prototype.trimRight = function(charlist) {
 
   return this.replace(new RegExp("[" + charlist + "]+$"), "");
 };
-let trimTaskExtensions = function(tasks) {
+let trimExtensions = function(tasks) {
   return tasks.map(task => {
     return {
       ...task,
@@ -38,6 +45,7 @@ let trimTaskExtensions = function(tasks) {
     };
   });
 };
+
 // async function
 let getRequest = async function(url) {
   console.log(`fetching: ${url}`);
@@ -98,7 +106,7 @@ export const actionCreators = {
       var response = await getRequest(techTasksUrl);
       dispatch({ type: receiveTechInfoType, tasks: response });
     } catch (err) {
-      dispatch({ type: receiveTechInfoType, err });
+      dispatch({ type: receiveError, err });
     }
   },
 
@@ -112,7 +120,32 @@ export const actionCreators = {
         task: { ...task, detail: response.details }
       });
     } catch (err) {
-      dispatch({ type: receiveTechInfoType, err });
+      dispatch({ type: receiveError, err });
+    }
+  },
+
+  requestCodeSnippets: () => async (dispatch, getState) => {
+    dispatch({ type: requestCodeSnippetsType });
+
+    try {
+      var response = await getRequest(codeSnippetsUrl);
+      dispatch({ type: receiveCodeSnippetsType, codesnippets: response });
+    } catch (err) {
+      dispatch({ type: receiveError, err });
+    }
+  },
+
+  requestSnippetDetail: snippet => async (dispatch, getState) => {
+    dispatch({ type: requestSnippetDetailType });
+
+    try {
+      var response = await getRequest(snippet.href);
+      dispatch({
+        type: receiveSnippetDetailType,
+        snippet: { ...snippet, detail: response.details }
+      });
+    } catch (err) {
+      dispatch({ type: receiveError, err });
     }
   }
 };
@@ -171,7 +204,7 @@ export const reducer = (state, action) => {
       } else {
         return {
           ...state,
-          tasks: trimTaskExtensions(action.tasks),
+          tasks: trimExtensions(action.tasks),
           isLoading: false
         };
       }
@@ -188,6 +221,34 @@ export const reducer = (state, action) => {
       return {
         ...state,
         tasks: modifiedTasks
+      };
+    case requestCodeSnippetsType:
+      return {
+        ...state,
+        currentError: undefined,
+        isLoading: true
+      };
+    case receiveCodeSnippetsType:
+      return {
+        ...state,
+        isLoading: false,
+        codesnippets: trimExtensions(action.codesnippets)
+      };
+    case receiveSnippetDetailType:
+      var modifiedSnippets = state.codesnippets.map(snippet => {
+        console.log(
+          `snippet.name : ${snippet.name} action.task:${action.snippet.name}`
+        );
+        if (snippet.name === action.snippet.name) {
+          console.log("snippet updated.");
+          snippet.detail = action.snippet.detail.data;
+        }
+        return snippet;
+      });
+
+      return {
+        ...state,
+        codesnippets: modifiedSnippets
       };
     case receiveError:
       return {
