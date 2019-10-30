@@ -92,7 +92,7 @@ export const actionCreators = {
     dispatch({ type: requestTechSearchTipsType });
     console.log(`searching category: ${searchValue}`);
     const response = await fetch(techTipsSearchUrl + `?q=${searchValue}`);
-    const tips = await response.json();
+    const tips = await response;
     if (tips.error !== undefined) {
       dispatch({ type: receiveError, error: tips.error, searchValue });
     } else {
