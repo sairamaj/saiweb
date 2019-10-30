@@ -29,6 +29,7 @@ const initialState = {
 const techTipsUrl = "https://saitech.azurewebsites.net/api/techtips";
 const techTasksUrl = "https://saitech.azurewebsites.net/api/techtasks";
 const codeSnippetsUrl = "https://saitech.azurewebsites.net/api/codesnippets";
+const techTipsSearchUrl = "https://techsearch.azurewebsites.net/api/TipsSearch";
 
 //const timeout = ms => new Promise(res => setTimeout(res, ms));
 
@@ -90,7 +91,7 @@ export const actionCreators = {
 
     dispatch({ type: requestTechSearchTipsType });
     console.log(`searching category: ${searchValue}`);
-    const response = await fetch(techTipsUrl + `/?q=${searchValue}`);
+    const response = await fetch(techTipsSearchUrl + `?q=${searchValue}`);
     const tips = await response.json();
     if (tips.error !== undefined) {
       dispatch({ type: receiveError, error: tips.error, searchValue });
