@@ -14,6 +14,10 @@ const receiveSnippetDetailType = "RECEIVE_SNIPPET_DETAIL_INFO";
 const receiveError = "RECEIVE_ERROR";
 const requestCodeSnippetsType = "REQUEST_CODESNIPPETS_INFO";
 const receiveCodeSnippetsType = "RECEIVE_CODESNIPPETS_INFO";
+const requestProjectsType = "REQUEST_PROJECTS_INFO";
+const receiveProjectsType = "RECEIVE_PROJECTS_INFO";
+const requestProjectDetailType = "REQUEST_PROJECT_DETAIL_INFO";
+const receiveProjectDetailType = "RECEIVE_PROJECT_DETAIL_INFO";
 
 const initialState = {
   categories: [],
@@ -24,21 +28,23 @@ const initialState = {
   tasks: [],
   taskdetail: {},
   codesnippets: [],
+  projects: [],
   currentError: undefined
 };
 const techTipsUrl = "https://saitech.azurewebsites.net/api/techtips";
 const techTasksUrl = "https://saitech.azurewebsites.net/api/techtasks";
 const codeSnippetsUrl = "https://saitech.azurewebsites.net/api/codesnippets";
+const codeProjectsUrl = "https://saitech.azurewebsites.net/api/projects";
 const techTipsSearchUrl = "https://techsearch.azurewebsites.net/api/TipsSearch";
 
 //const timeout = ms => new Promise(res => setTimeout(res, ms));
 
-String.prototype.trimRight = function(charlist) {
+String.prototype.trimRight = function (charlist) {
   if (charlist === undefined) charlist = "s";
 
   return this.replace(new RegExp("[" + charlist + "]+$"), "");
 };
-let trimExtensions = function(tasks) {
+let trimExtensions = function (tasks) {
   return tasks.map(task => {
     return {
       ...task,
@@ -48,7 +54,7 @@ let trimExtensions = function(tasks) {
 };
 
 // async function
-let getRequest = async function(url) {
+let getRequest = async function (url) {
   console.log(`fetching: ${url}`);
   let data = await await fetch(url)
     .then(res => {
@@ -148,8 +154,49 @@ export const actionCreators = {
     } catch (err) {
       dispatch({ type: receiveError, err });
     }
-  }
+  },
+
+  requestProjects: () => async (dispatch, getState) => {
+    dispatch({ type: requestProjectsType });
+
+    try {
+      //var response = await getRequest(projectsUrl);
+      var response = [
+        {
+          name: "project1"
+        },
+        {
+          name: "project2"
+        }
+      ]
+      dispatch({ type: receiveProjectsType, projects: response });
+    } catch (err) {
+      dispatch({ type: receiveError, err });
+    }
+  },
+
+  requestProjectDetail: project => async (dispatch, getState) => {
+    dispatch({ type: requestProjectDetailType });
+
+    try {
+      //var response = await getRequest(snippet.href);
+      var response = {
+        details:{
+          data : "this is project details"
+        }
+      }
+      dispatch({
+        type: receiveProjectDetailType,
+        project: { ...project, detail: response.details }
+      });
+    } catch (err) {
+      dispatch({ type: receiveError, err });
+    }
+  },
+
 };
+
+
 
 export const reducer = (state, action) => {
   console.log("reducer:" + action.type);
@@ -250,6 +297,34 @@ export const reducer = (state, action) => {
       return {
         ...state,
         codesnippets: modifiedSnippets
+      };
+    case requestProjectsType:
+      return {
+        ...state,
+        currentError: undefined,
+        isLoading: true
+      };
+    case receiveProjectsType:
+      return {
+        ...state,
+        isLoading: false,
+        projects: trimExtensions(action.projects)
+      };
+    case receiveProjectDetailType:
+      var modifiedProjects = state.projects.map(project => {
+        console.log(
+          `project.name : ${project.name} action.task:${action.project.name}`
+        );
+        if (project.name === action.project.name) {
+          console.log("project updated.");
+          project.detail = action.project.detail.data;
+        }
+        return project;
+      });
+
+      return {
+        ...state,
+        projects: modifiedProjects
       };
     case receiveError:
       return {

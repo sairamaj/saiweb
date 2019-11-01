@@ -5,6 +5,7 @@ import TechTips from './components/TechTips';
 import TechTipDetails from './components/TechTipDetails';
 import Tasks from './azure/components/Tasks';
 import Snippet from './codesnippets/components/Snippet';
+import Project from './projects/components/Project';
 
 export default () => (
   <Layout>
@@ -13,5 +14,6 @@ export default () => (
     <Route path='/techtipdetails/:name' component={TechTipDetails} />
     <Route path='/azure' component={Tasks} />
     <Route path='/codesnippets' component={Snippet} />
+    <Route path='/projects' component={Project} />
   </Layout>
 );
