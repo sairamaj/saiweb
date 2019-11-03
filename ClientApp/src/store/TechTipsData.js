@@ -160,15 +160,7 @@ export const actionCreators = {
     dispatch({ type: requestProjectsType });
 
     try {
-      //var response = await getRequest(projectsUrl);
-      var response = [
-        {
-          name: "project1"
-        },
-        {
-          name: "project2"
-        }
-      ]
+      var response = await getRequest(codeProjectsUrl);
       dispatch({ type: receiveProjectsType, projects: response });
     } catch (err) {
       dispatch({ type: receiveError, err });
@@ -179,12 +171,7 @@ export const actionCreators = {
     dispatch({ type: requestProjectDetailType });
 
     try {
-      //var response = await getRequest(snippet.href);
-      var response = {
-        details:{
-          data : "this is project details"
-        }
-      }
+      var response = await getRequest(project.href);
       dispatch({
         type: receiveProjectDetailType,
         project: { ...project, detail: response.details }
@@ -192,8 +179,7 @@ export const actionCreators = {
     } catch (err) {
       dispatch({ type: receiveError, err });
     }
-  },
-
+  }
 };
 
 

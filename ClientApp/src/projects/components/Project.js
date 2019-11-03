@@ -22,7 +22,7 @@ class Project extends Component {
 
     return <div>
       <br/><br/>
-      <h3>Tasks</h3>
+      <h3>Projects</h3>
       {this.renderTasks(this.props, this.onProjectClick)}
     </div>;
   }
